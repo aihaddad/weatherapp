@@ -3,14 +3,12 @@ version: '3.7'
 services:
   backend:
     build: backend
-    image: weather-back
     env_file: .env
     ports:
       - 9000:9000
 
   frontend:
     build: frontend
-    image: weather-front
     env_file: .env
     ports:
       - 8000:8000

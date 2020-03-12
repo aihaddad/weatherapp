@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  backend-dev:
+    image: node:13.8.0-alpine3.11
+    volumes:
+      - weatherapp_backend_node_modules:/backend/node_modules
+      - ./backend:/backend
+    working_dir: /backend
+    command: ["npm", "install"]
+
+  frontend-dev:
+    image: node:13.8.0-alpine3.11
+    volumes:
+      - weatherapp_frontend_node_modules:/frontend/node_modules
+      - ./frontend:/frontend
+    working_dir: /frontend
+    command: ["npm", "install"]
+
+volumes:
+  weatherapp_backend_node_modules:
+    external: true
+  weatherapp_frontend_node_modules:
+    external: true
