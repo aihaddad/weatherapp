@@ -13,9 +13,9 @@ _This fork holds my solutions to a selective list of tasks/exercises put forward
 
 ## Exercises
 
-The app itself is a backend API that pulls weather data from [OpenWeatherMap][2] before serving it to a simple React frontend which displays a large _current weather_ icon.
+The app itself is a backend API that pulls weather data from [OpenWeatherMap][2] before serving it to a simple React frontend which displays a large current weather icon.
 
-The challenge guidelines I am working with in my plan include a few exercises. The first is a mandatory Docker containerization section. Then, setting up the containerized app with a cloud service provider. Finally, a choice of either a CI/CD pipeline, or automated deployments with Ansible.
+The challenge guidelines I am working with in my plan include a few exercises. The first is Docker containerization. Then, setting up the containerized app with a cloud service provider. Finally, a choice of either a CI/CD pipeline, or automated deployments with Ansible.
 
 _The following sections will be updated as I continue going through the tasks._
 
@@ -29,14 +29,14 @@ _The following sections will be updated as I continue going through the tasks._
 The first two requirements were a straightforward Docker image-building and container-running implementation. The challenge is mainly the third point, where we need a development workflow that allows for hot reloads and utilizes shared volumes.
 
 The implementation here involves the use of a lightweight __Node-13__ base image, two new [docker-compose][3] files, and a __Makefile__ to make things easier.
-* `docker-complose.dev-build.yml` is used for setting up NPM modules for both, the backend and frontend, on their own external Docker volumes
+* `docker-compose.dev-build.yml` is used for setting up NPM modules for both, the backend and frontend, on their own external Docker volumes
 * `docker-compose.dev-run.yml` is used for starting up the backend in debug mode, and the frontend in a hot reload development mode.
 
 #### Usage
 * Clone the repo and `cd weatherapp/`
-* On first run, create the necessaery Docker volumes with `make init`
+* On first run, create the necessary Docker volumes with `make init`
 * Run `docker volume ls` and you should see the two newly built volumes `weatherapp_backend_node_modules` and `weatherapp_frontend_node_modules`
-* From now on, everytime the `packages.json` is changed, run `make modules` to do the module installations and persist them on the shared modules volumes
+* From now on, everytime the `packages.json` file is changed, run `make modules` to do the module installations and persist them on the shared modules volumes
 * Otherwise, run `make hotrun` to start both sides of the app in a hot/live-reload mode
 * When ready for deployment, run `make containers` or `docker-compose up` to build the images via the Dockerfile-s and run the containers
 * Check if everything is OK, then kill the containers and push and/or deploy the `weatherapp_backend` and `weatherapp_frontend` images

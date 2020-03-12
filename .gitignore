@@ -9,3 +9,6 @@ node_modules
 
 # Env
 .env
+
+# VS Code
+.vscode
