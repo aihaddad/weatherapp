@@ -15,7 +15,7 @@ _This fork holds my solutions to a selective list of tasks/exercises put forward
 
 The app itself is a backend API that pulls weather data from [OpenWeatherMap][2] before serving it to a simple React frontend which displays a large _current weather_ icon.
 
-The challenge guidelines I am working with in my plan include a few exercises. The first is a mandatory Docker cintainerization section. Then, setting up the containerized app with a cloud service provider. Finally, a choice of either a CI/CD pipeline, or automated deployments with Ansible.
+The challenge guidelines I am working with in my plan include a few exercises. The first is a mandatory Docker containerization section. Then, setting up the containerized app with a cloud service provider. Finally, a choice of either a CI/CD pipeline, or automated deployments with Ansible.
 
 _The following sections will be updated as I continue going through the tasks._
 
