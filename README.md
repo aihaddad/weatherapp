@@ -1,77 +1,71 @@
 # Weatherapp
 
-There was a beautiful idea of building an app that would show the upcoming weather. The developers wrote a nice backend and a frontend following the latest principles and - to be honest - bells and whistles. However, the developers did not remember to add any information about the infrastructure or even setup instructions in the source code.
-
-Luckily we now have [docker compose](https://docs.docker.com/compose/) saving us from installing the tools on our computer, and making sure the app looks (and is) the same in development and in production. All we need is someone to add the few missing files!
+_This fork holds my solutions to a selective list of tasks/exercises put forward by Eficode on their [Weatherapp][1] repo. Taking on the challenge sounded like a great learning activity to practice concepts like containerization, cloud infrastructure and automated deployments with Ansible. Hence, my solutions will be to the tasks related to these topics._
 
 ## Prerequisites
 
-* An [openweathermap](http://openweathermap.org/) API key.
-
-## Returning your solution
-
-### Via github
-
-* Make a copy of this repository in your own github account (do not fork unless you really want to be public).
-* Create a personal repository in github.
-* Make changes, commit them, and push them in your own repository.
-* Send us the url where to find the code.
-
-### Via tar-package
-
-* Clone this repository.
-* Make changes and **commit them**.
-* Create a **.tgz** -package including the **.git**-directory, but excluding the **node_modules**-directories.
-* Send us the archive.
+* Sign up/in to [OpenWeatherMap][2], and get an API key.
+* Create a `.env` file in the root directory with the following information:
+    ```
+    APPID=<YOUR_OPENWEATHERMAP_API_KEY>
+    ENDPOINT=http://0.0.0.0:9000/api
+    ```
 
 ## Exercises
 
-Here are some things in different categories that you can do to make the app better. Before starting you need to get yourself an API key to make queries in the [openweathermap](http://openweathermap.org/). You can run the app locally using `npm i && npm start`.
+The app itself is a backend API that pulls weather data from [OpenWeatherMap][2] before serving it to a simple React frontend which displays a large _current weather_ icon.
+
+The challenge guidelines I am working with in my plan include a few exercises. The first is a mandatory Docker cintainerization section. Then, setting up the containerized app with a cloud service provider. Finally, a choice of either a CI/CD pipeline, or automated deployments with Ansible.
+
+_The following sections will be updated as I continue going through the tasks._
 
 ### Docker
 
-*Docker containers are central to any modern development initiative. By knowing how to set up your application into containers and make them interact with each other, you have learned a highly useful skill.*
+> _Docker containers are central to any modern development initiative. By knowing how to set up your application into containers and make them interact with each other, you have learned a highly useful skill._
+> * Add __Dockerfile__-s in the _frontend_ and the _backend_ directories to run them virtually on any environment having [Docker][3] installed. It should work by saying e.g. `docker build -t weatherapp_backend . && docker run --rm -i -p 9000:9000 --name weatherapp_backend -t weatherapp_backend`. If it doesn't, remember to check your api key first.
+> * Add a __docker-compose.yml__ -file connecting the frontend and the backend, enabling running the app in a connected set of containers.
+> * The developers are still keen to run the app and its pipeline on their own computers. Share the development files for the container by using volumes, and make sure the containers are started with a command enabling hot reload.
 
-* Add **Dockerfile**'s in the *frontend* and the *backend* directories to run them virtually on any environment having [docker](https://www.docker.com/) installed. It should work by saying e.g. `docker build -t weatherapp_backend . && docker run --rm -i -p 9000:9000 --name weatherapp_backend -t weatherapp_backend`. If it doesn't, remember to check your api key first.
+The first two requirements were a straightforward Docker image-building and container-running implementation. The challenge is mainly the third point, where we need a development workflow that allows for hot reloads and utilizes shared volumes.
 
-* Add a **docker-compose.yml** -file connecting the frontend and the backend, enabling running the app in a connected set of containers.
+The implementation here involves the use of a lightweight __Node-13__ base image, two new [docker-compose][3] files, and a __Makefile__ to make things easier.
+* `docker-complose.dev-build.yml` is used for setting up NPM modules for both, the backend and frontend, on their own external Docker volumes
+* `docker-compose.dev-run.yml` is used for starting up the backend in debug mode, and the frontend in a hot reload development mode.
 
-* The developers are still keen to run the app and its pipeline on their own computers. Share the development files for the container by using volumes, and make sure the containers are started with a command enabling hot reload.
+#### Usage
+* Clone the repo and `cd weatherapp/`
+* On first run, create the necessaery Docker volumes with `make init`
+* Run `docker volume ls` and you should see the two newly built volumes `weatherapp_backend_node_modules` and `weatherapp_frontend_node_modules`
+* From now on, everytime the `packages.json` is changed, run `make modules` to do the module installations and persist them on the shared modules volumes
+* Otherwise, run `make hotrun` to start both sides of the app in a hot/live-reload mode
+* When ready for deployment, run `make containers` or `docker-compose up` to build the images via the Dockerfile-s and run the containers
+* Check if everything is OK, then kill the containers and push and/or deploy the `weatherapp_backend` and `weatherapp_frontend` images
 
-### Node and React development
+___
+___A Note regarding Node-13:___
 
-*Node and React applications are highly popular technologies. Understanding them will give you an advantage in front- and back-end development projects.*
-
-* The application now only reports the current weather. It should probably report the forecast e.g. a few hours from now. (tip: [openweathermap api](https://openweathermap.org/forecast5))
-
-* There are [eslint](http://eslint.org/) errors. Sloppy coding it seems. Please help.
-
-* The app currently reports the weather only for location defined in the *backend*. Shouldn't it check the browser location and use that as the reference for making a forecast? (tip: [geolocation](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation))
-
-### Testing
-
-*Test automation is key in developing good quality applications. Finding bugs in early stages of development is valuable in any software development project. With Robot Framework you can create integration tests that also serve as feature descriptions, making them exceptionally useful.*
-
-* Create automated tests for the application. (tip: [mocha](https://mochajs.org/))
-
-* Create [Robot Framework](http://robotframework.org/) integration tests. Hint: Start by creating a third container that gives expected weather data and direct the backend queries there by redefining the **MAP_ENDPOINT**.
+_The app ran well on my local Node v13.8.0, but caused some errors within the the v13.10 Docker image. This is why I explicitly selected the `node:13.8.0-alpine3.11` image_
+___
 
 ### Cloud
 
-*The biggest trend of recent times is developing, deploying and hosting your applications in cloud. Knowing cloud -related technologies is essential for modern IT specialists.*
+> _The biggest trend of recent times is developing, deploying and hosting your applications in cloud. Knowing cloud -related technologies is essential for modern IT specialists._
+> * Set up the weather service in a free cloud hosting service, e.g. [AWS][5] or [Google Cloud][6].
 
-* Set up the weather service in a free cloud hosting service, e.g. [AWS](https://aws.amazon.com/free/) or [Google Cloud](https://cloud.google.com/free/).
+_In progress... (I am also considering Ansible for AWS infrastructure automation)_
 
 ### Ansible
 
-*Automating deployment processes saves a lot of valuable time and reduces chances of costly errors. Infrastructure as Code removes manual steps and allows people to concentrate on core activities.*
+> _Automating deployment processes saves a lot of valuable time and reduces chances of costly errors. Infrastructure as Code removes manual steps and allows people to concentrate on core activities._
+> * Write [Ansible][7] playbooks for installing [Docker][3] and the app itself.
 
-* Write [ansible](http://docs.ansible.com/ansible/intro.html) playbooks for installing [docker](https://www.docker.com/) and the app itself.
+_In progress... (I am also considering Ansible for AWS infrastructure automation)_
 
-### Documentation
 
-*Good documentation benefits everyone.*
-
-* Remember to update the README
-
-* Use descriptive names and add comments in the code when necessary
+[1]: https://github.com/eficode/weatherapp
+[2]: http://openweathermap.org
+[3]: https://www.docker.com/
+[4]: https://docs.docker.com/compose
+[5]: https://aws.amazon.com/free
+[6]: https://cloud.google.com/free
+[7]: http://docs.ansible.com/ansible/intro.html
