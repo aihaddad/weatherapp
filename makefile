@@ -6,4 +6,4 @@ modules:
 hotrun:
 	docker-compose -f docker-compose.dev-run.yml up
 containers:
-	docker-compose up
+	docker-compose up -d
