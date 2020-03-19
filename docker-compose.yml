@@ -3,12 +3,14 @@ version: '3.7'
 services:
   backend:
     build: backend
-    env_file: .env
+    environment:
+      APPID: ${APPID}
     ports:
-      - 9000:9000
+      - ${API_PORT:-9000}:9000
 
   frontend:
     build: frontend
-    env_file: .env
+    environment:
+      ENDPOINT: ${ENDPOINT}
     ports:
-      - 8000:8000
+      - ${CLIENT_PORT:-8000}:8000
