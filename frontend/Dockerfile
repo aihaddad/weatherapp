@@ -5,5 +5,5 @@ COPY . .
 
 EXPOSE 8000
 
-RUN npm install
+RUN npm ci
 CMD ["npm", "start"]
