@@ -1,6 +1,6 @@
 # Weatherapp
 
-_This fork holds my solutions to a selective list of tasks/exercises put forward by Eficode on their [Weatherapp][1] repo. Taking on the challenge sounded like a great learning activity to practice concepts like containerization, cloud infrastructure and automated deployments with Ansible. Hence, my solutions will be to the tasks related to these topics._
+_This copy holds my solutions to a selective list of tasks/exercises put forward by Eficode on their [Weatherapp][1] repo. Taking on the challenge sounded like a great learning activity to practice concepts like [containerization](#docker), [cloud infrastructure](#cloud) and automated deployments with [Ansible](#ansible). Hence, my solutions will be to the tasks related to these topics._
 
 ## Prerequisites
 
@@ -52,14 +52,14 @@ ___
 > _The biggest trend of recent times is developing, deploying and hosting your applications in cloud. Knowing cloud -related technologies is essential for modern IT specialists._
 > * Set up the weather service in a free cloud hosting service, e.g. [AWS][5] or [Google Cloud][6].
 
-_In progress... (I am also considering Ansible for AWS infrastructure automation)_
+_In progress... (I am considering what features this section can add to the Ansible section below)_
 
 ### Ansible
 
 > _Automating deployment processes saves a lot of valuable time and reduces chances of costly errors. Infrastructure as Code removes manual steps and allows people to concentrate on core activities._
 > * Write [Ansible][7] playbooks for installing [Docker][3] and the app itself.
 
-_In progress... (I am also considering Ansible for AWS infrastructure automation)_
+The whole Ansible deployment workflow is available on the [`weatherapp-ansible`][8] repo
 
 
 [1]: https://github.com/eficode/weatherapp
@@ -69,3 +69,4 @@ _In progress... (I am also considering Ansible for AWS infrastructure automation
 [5]: https://aws.amazon.com/free
 [6]: https://cloud.google.com/free
 [7]: http://docs.ansible.com/ansible/intro.html
+[8]: https://github.com/aihaddad/weatherapp-ansible
